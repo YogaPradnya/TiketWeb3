@@ -1,6 +1,5 @@
 "use client";
 
-import ConnectButton from "@/components/ConnectButton";
 import { NFTIX_EVENT_ABI, NFTIX_EVENT_ADDRESS } from "@/lib/contract";
 import Link from "next/link";
 import { useState } from "react";
@@ -99,8 +98,7 @@ export default function MyTicketsPage() {
   const { data: tickets } = useReadContract({ address: NFTIX_EVENT_ADDRESS, abi: NFTIX_EVENT_ABI, functionName: "getOwnedTickets", args: address ? [address] : undefined, query: { enabled: Boolean(address) } });
 
   return (
-    <main className="min-h-screen bg-[#0b0e11] text-[#eaecef]">
-      <nav className="h-16 border-b border-[#2b3139]"><div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4"><Link href="/" className="text-xl font-bold text-white">NFTix Tickets</Link><ConnectButton /></div></nav>
+    <main className="text-[#eaecef]">
       <section className="mx-auto max-w-7xl px-4 py-16">
         <p className="text-sm font-semibold text-[#FCD535]">My Controlled Tickets</p>
         <h1 className="mt-2 text-4xl font-bold text-white">Ticket Wallet</h1>

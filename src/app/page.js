@@ -1,6 +1,5 @@
 "use client";
 
-import ConnectButton from "@/components/ConnectButton";
 import { NFTIX_EVENT_ABI, NFTIX_EVENT_ADDRESS } from "@/lib/contract";
 import Link from "next/link";
 import { formatEther } from "viem";
@@ -98,18 +97,7 @@ export default function Home() {
   const visibleIds = EVENT_IDS.filter((id) => eventCount && id <= eventCount);
 
   return (
-    <main className="min-h-screen bg-[#0b0e11] font-[var(--font-inter)] text-[#eaecef]">
-      <nav className="h-16 border-b border-[#2b3139] bg-[#0b0e11]">
-        <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="text-xl font-bold tracking-tight text-[#ffffff]">NFTix</Link>
-          <div className="hidden items-center gap-8 md:flex">
-            <Link href="/" className="text-sm font-medium text-[#eaecef] hover:text-[#FCD535]">Events</Link>
-            <Link href="/my-tickets" className="text-sm font-medium text-[#eaecef] hover:text-[#FCD535]">My Tickets</Link>
-            <Link href="/admin" className="text-sm font-medium text-[#eaecef] hover:text-[#FCD535]">Admin</Link>
-          </div>
-          <ConnectButton />
-        </div>
-      </nav>
+    <main className="font-[var(--font-inter)] text-[#eaecef]">
 
       <section className="px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">

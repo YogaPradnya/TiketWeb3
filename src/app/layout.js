@@ -1,4 +1,6 @@
 import Providers from "./providers";
+import Navbar from "@/components/Navbar";
+import BottomBar from "@/components/BottomBar";
 import "./globals.css";
 
 export const metadata = {
@@ -14,7 +16,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <div className="flex flex-col min-h-screen bg-[#0b0e11] text-[#eaecef]">
+            <Navbar />
+            <div className="flex-grow">
+              {children}
+            </div>
+            <BottomBar />
+          </div>
+        </Providers>
       </body>
     </html>
   );

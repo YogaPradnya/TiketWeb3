@@ -1,6 +1,5 @@
 "use client";
 
-import ConnectButton from "@/components/ConnectButton";
 import { NFTIX_EVENT_ABI, NFTIX_EVENT_ADDRESS } from "@/lib/contract";
 import Link from "next/link";
 import { useState } from "react";
@@ -72,8 +71,7 @@ export default function AdminPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0b0e11] text-[#eaecef]">
-      <nav className="h-16 border-b border-[#2b3139]"><div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4"><Link href="/" className="text-xl font-bold text-white">NFTix Admin</Link><ConnectButton /></div></nav>
+    <main className="text-[#eaecef]">
       <section className="mx-auto max-w-7xl px-4 py-16">
         <AdminStatusCard address={address} adminRole={adminRole} isAdmin={isAdmin} isCheckingAdmin={isCheckingAdmin} roleError={roleError} />
         {!isConnected ? <div className="rounded-xl bg-[#1e2329] p-8">Connect wallet admin terlebih dahulu.</div> : isCheckingAdmin ? <div className="rounded-xl border border-[#FCD535] bg-[#1e2329] p-8 text-[#FCD535]">Checking admin role on Sepolia...</div> : roleError ? <div className="rounded-xl border border-[#f6465d] bg-[#1e2329] p-8 text-[#f6465d]">Role check failed. Pastikan contract address terbaru, MetaMask Sepolia, dan server sudah restart.</div> : !isAdmin ? <div className="rounded-xl border border-[#f6465d] bg-[#1e2329] p-8 text-[#f6465d]">Access Denied. Wallet ini bukan admin contract.</div> : (
