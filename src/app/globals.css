@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+:root {
+  --canvas-dark: #0b0e11;
+  --surface-card-dark: #1e2329;
+  --surface-elevated-dark: #2b3139;
+  --primary-accent: #FCD535;
+  --text-on-dark: #ffffff;
+  --body-text: #eaecef;
+  --muted-text: #707a8a;
+  --hairline-dark: #2b3139;
+  --trading-up: #0ecb81;
+  --trading-down: #f6465d;
+  --on-primary: #181a20;
+  --font-inter: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-jetbrains-mono: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--canvas-dark);
+  color: var(--body-text);
+  font-family: var(--font-inter);
+}
+
+button,
+a {
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
