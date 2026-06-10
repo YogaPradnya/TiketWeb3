@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useSyncExternalStore } from "react";
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useAccount, useBalance, useConnect, useDisconnect } from "wagmi";
 
 function truncateAddress(address) {
   if (!address) return "";
@@ -43,6 +43,8 @@ export default function ConnectButton() {
     [connectors]
   );
 
+  const { data: balance } = useBalance({ address, query: { enabled: isConnected } });
+
   if (!hasMetaMask) {
     return (
       <a
@@ -58,16 +60,27 @@ export default function ConnectButton() {
   }
 
   if (isConnected) {
+    const balanceFormatted = balance
+      ? `${parseFloat(balance.formatted).toFixed(4)} ${balance.symbol}`
+      : null;
+
     return (
-      <button
-        id="disconnect-wallet-button"
-        className="h-10 rounded-full bg-[#FCD535] px-6 font-[var(--font-jetbrains-mono)] text-sm font-semibold text-[#181a20] hover:bg-[#f0b90b]"
-        type="button"
-        onClick={() => disconnect()}
-        title="Disconnect wallet"
-      >
-        {truncateAddress(address)}
-      </button>
+      <div className="flex items-center gap-3">
+        {balanceFormatted && (
+          <span className="font-[var(--font-jetbrains-mono)] text-xs font-medium text-[#707a8a]">
+            {balanceFormatted}
+          </span>
+        )}
+        <button
+          id="disconnect-wallet-button"
+          className="h-10 rounded-full bg-[#FCD535] px-6 font-[var(--font-jetbrains-mono)] text-sm font-semibold text-[#181a20] hover:bg-[#f0b90b]"
+          type="button"
+          onClick={() => disconnect()}
+          title="Disconnect wallet"
+        >
+          {truncateAddress(address)}
+        </button>
+      </div>
     );
   }
 

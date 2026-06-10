@@ -1,16 +1,33 @@
 "use client";
 
+import { NFTIX_EVENT_ABI, NFTIX_EVENT_ADDRESS } from "@/lib/contract";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAccount, useReadContract } from "wagmi";
 import ConnectButton from "./ConnectButton";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { address, isConnected } = useAccount();
+
+  const { data: adminRole } = useReadContract({
+    address: NFTIX_EVENT_ADDRESS,
+    abi: NFTIX_EVENT_ABI,
+    functionName: "DEFAULT_ADMIN_ROLE",
+    query: { enabled: isConnected, retry: 1 },
+  });
+  const { data: isAdmin } = useReadContract({
+    address: NFTIX_EVENT_ADDRESS,
+    abi: NFTIX_EVENT_ABI,
+    functionName: "hasRole",
+    args: adminRole && address ? [adminRole, address] : undefined,
+    query: { enabled: Boolean(adminRole && address), retry: 1 },
+  });
 
   const links = [
     { href: "/", label: "Events" },
     { href: "/my-tickets", label: "My Tickets" },
-    { href: "/admin", label: "Admin" },
+    ...(isAdmin ? [{ href: "/admin", label: "Admin" }] : []),
   ];
 
   return (

@@ -1,12 +1,27 @@
 "use client";
 
+import { NFTIX_EVENT_ABI, NFTIX_EVENT_ADDRESS } from "@/lib/contract";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAccount } from "wagmi";
+import { useAccount, useReadContract } from "wagmi";
 
 export default function BottomBar() {
   const pathname = usePathname();
-  const { isConnected, chain } = useAccount();
+  const { address, isConnected, chain } = useAccount();
+
+  const { data: adminRole } = useReadContract({
+    address: NFTIX_EVENT_ADDRESS,
+    abi: NFTIX_EVENT_ABI,
+    functionName: "DEFAULT_ADMIN_ROLE",
+    query: { enabled: isConnected, retry: 1 },
+  });
+  const { data: isAdmin } = useReadContract({
+    address: NFTIX_EVENT_ADDRESS,
+    abi: NFTIX_EVENT_ABI,
+    functionName: "hasRole",
+    args: adminRole && address ? [adminRole, address] : undefined,
+    query: { enabled: Boolean(adminRole && address), retry: 1 },
+  });
 
   const links = [
     { 
@@ -27,16 +42,19 @@ export default function BottomBar() {
         </svg>
       )
     },
-    { 
-      href: "/admin", 
-      label: "Admin", 
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-        </svg>
-      )
-    }
   ];
+
+  const adminLink = {
+    href: "/admin",
+    label: "Admin",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+      </svg>
+    ),
+  };
+
+  const visibleLinks = isAdmin ? [...links, adminLink] : links;
 
   return (
     <>
@@ -62,7 +80,7 @@ export default function BottomBar() {
 
       {/* Mobile Sticky Bottom Bar */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 border-t border-[#2b3139] bg-[#0b0e11] bg-opacity-95 backdrop-blur-md z-50 flex items-center justify-around px-4">
-        {links.map((link) => {
+        {visibleLinks.map((link) => {
           const isActive = pathname === link.href;
           return (
             <Link

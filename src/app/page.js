@@ -87,6 +87,21 @@ function EventCard({ eventId }) {
 }
 
 export default function Home() {
+  const { address, isConnected } = useAccount();
+
+  const { data: adminRole } = useReadContract({
+    address: NFTIX_EVENT_ADDRESS,
+    abi: NFTIX_EVENT_ABI,
+    functionName: "DEFAULT_ADMIN_ROLE",
+    query: { enabled: isConnected, retry: 1 },
+  });
+  const { data: isAdmin } = useReadContract({
+    address: NFTIX_EVENT_ADDRESS,
+    abi: NFTIX_EVENT_ABI,
+    functionName: "hasRole",
+    args: adminRole && address ? [adminRole, address] : undefined,
+    query: { enabled: Boolean(adminRole && address), retry: 1 },
+  });
   const { data: eventCount } = useReadContract({
     address: NFTIX_EVENT_ADDRESS,
     abi: NFTIX_EVENT_ABI,
@@ -104,7 +119,7 @@ export default function Home() {
           <p className="mb-5 inline-flex rounded-lg border border-[#2b3139] bg-[#1e2329] px-4 py-2 text-sm font-semibold text-[#FCD535]">Soulbound Anti-Calo Ticketing</p>
           <h1 className="max-w-4xl text-4xl font-bold tracking-tight text-[#ffffff] sm:text-5xl lg:text-[64px] lg:leading-[1.1]">Secure Your Seat. Zero Scalpers.</h1>
           <p className="mt-6 max-w-2xl text-base leading-7 text-[#eaecef] sm:text-lg">Admin membuat event on-chain. User membeli tiket NFT Soulbound yang tidak bisa ditransfer atau dijual ulang.</p>
-          <div className="mt-8 flex gap-3"><Link href="/admin" className="inline-flex h-10 items-center rounded-md bg-[#1e2329] px-6 text-sm font-semibold text-[#ffffff]">Admin Panel</Link><Link href="/my-tickets" className="inline-flex h-10 items-center rounded-md bg-[#FCD535] px-6 text-sm font-semibold text-[#181a20]">My Tickets</Link></div>
+          <div className="mt-8 flex gap-3">{isAdmin && <Link href="/admin" className="inline-flex h-10 items-center rounded-md bg-[#1e2329] px-6 text-sm font-semibold text-[#ffffff]">Admin Panel</Link>}<Link href="/my-tickets" className="inline-flex h-10 items-center rounded-md bg-[#FCD535] px-6 text-sm font-semibold text-[#181a20]">My Tickets</Link></div>
         </div>
       </section>
 
